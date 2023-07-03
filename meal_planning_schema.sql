@@ -5,7 +5,6 @@ CREATE TABLE recipes (
   title VARCHAR(255),
   description TEXT NOT NULL,
   image VARCHAR(255),
-  meal_category_id INTEGER REFERENCES meal_categories(meal_category_id)
 );
 
 CREATE TABLE items (
