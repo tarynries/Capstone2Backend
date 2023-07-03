@@ -18,23 +18,18 @@ router.get("/", async function (req, res, next) {
         });
 
 
-        const MAX_JOKE_LENGTH = 255;
-
         const apiJokes = [];
 
-        // Checking joke length and inserting to database
-        if (response.data.jokes && response.data.jokes.length > 0) {
-            for (const joke of response.data.jokes) {
-                const truncatedJoke = joke.text.substring(0, MAX_JOKE_LENGTH);
-                const insertedJoke = await db.query(
-                    `INSERT INTO jokes (text) VALUES ($1) RETURNING id, text`,
-                    [truncatedJoke]
-                );
-                apiJokes.push({
-                    id: insertedJoke.rows[0].id,
-                    text: insertedJoke.rows[0].text,
-                });
-            }
+        if (response.data.text && response.data.text.length > 0) {
+            const truncatedJoke = response.data.text;
+            const insertedJoke = await db.query(
+                `INSERT INTO jokes (text) VALUES ($1) RETURNING id, text`,
+                [truncatedJoke]
+            );
+            apiJokes.push({
+                id: insertedJoke.rows[0].id,
+                text: insertedJoke.rows[0].text,
+            });
         }
 
         const dbJokes = await db.query("SELECT * FROM jokes");
